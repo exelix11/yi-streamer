@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/wsServer/include/"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/arm-linux-gnueabi-gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++98",
+            "intelliSenseMode": "linux-gcc-arm"
+        }
+    ],
+    "version": 4
+}

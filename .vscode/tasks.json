@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "arm-linux-gnueabi-gcc",
+			"args": [
+				"main.c",
+				"source.c",
+				"wsStream.c",
+
+				"-I","wsServer/include/",
+				"libws.a",
+				
+				"-lpthread",
+
+				"-std=c17",
+				"-O2",
+				"-Wall",
+				"-Werror",
+				"-marm",
+				"-march=armv5tej",
+				"--static",
+
+				"-o", "yi-streamer"
+			],
+			"problemMatcher":"$gcc",
+			"group": "build"
+		}
+	]
+}
