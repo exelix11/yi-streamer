@@ -125,6 +125,20 @@ static int PPS_Len;
 
 void VideoResync(ReadBlock* block)
 {
+	if (SPS)
+	{
+		free(SPS);
+		SPS = NULL;
+		SPS_Len = 0; 
+	}
+
+	if (PPS)
+	{
+		free(PPS);
+		PPS = NULL;
+		PPS_Len = 0; 
+	}
+
 	volatile BufferHeader *h = &view->Buffer[target_ch];
 	char* d = (char*)view->data + target_offset;
 
@@ -249,6 +263,7 @@ static inline void DoReadToBlock(ReadBlock** target, volatile BufferEntry* entry
 		(*target)->index = 0;
 }
 
+// Should work but couldn't manage to play it in the browser
 static inline bool ReadAudio(ReadBlock** target)
 {
 	if (!view->Buffer[CHANNEL_AUDIO].entries[(*target)->index].ready)
@@ -287,6 +302,7 @@ void SourceReadAudio(ReadBlock** target)
 	while (!ReadAudio(target));
 }
 
+// Same as ReadAudio
 ReadBlock* SourceReadAV(ReadBlock** video, ReadBlock** audio)
 {
 	while (1)
