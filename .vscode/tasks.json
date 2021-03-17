@@ -4,7 +4,7 @@
 		{
 			"label": "build",
 			"type": "shell",
-			"command": "arm-linux-gnueabi-gcc",
+			"command": "arm-hisiv300-linux-gcc",
 			"args": [
 				"main.c",
 				"source.c",
@@ -15,12 +15,11 @@
 				
 				"-lpthread",
 
-				"-std=c17",
 				"-O2",
 				"-Wall",
 				"-Werror",
 				"-marm",
-				"-march=armv5tej",
+				"-march=armv5te",
 				"--static",
 
 				"-o", "yi-streamer"

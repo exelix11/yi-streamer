@@ -10,18 +10,20 @@
 #include <string.h>
 
 #include <pthread.h>
-#include <stdatomic.h>
 
 static pthread_mutex_t clientsLock;
-static atomic_int connectedClients = 0;
+static int connectedClients = 0;
 static int clients[MAX_CLIENTS];
 
 static bool addClient(int fd)
 {
-	if (connectedClients >= MAX_CLIENTS)
-		return false;
-
 	pthread_mutex_lock(&clientsLock);
+	if (connectedClients >= MAX_CLIENTS)
+	{
+		pthread_mutex_unlock(&clientsLock);
+		return false;
+	}
+
 	clients[connectedClients] = fd;
 	connectedClients++;
 	pthread_mutex_unlock(&clientsLock);
@@ -31,13 +33,16 @@ static bool addClient(int fd)
 
 static void removeClient(int fd)
 {
+	pthread_mutex_lock(&clientsLock);
 	int i = 0;
 	for (; i < connectedClients && clients[i] != fd; i++) ;
 
 	if (i == connectedClients)
+	{
+		pthread_mutex_unlock(&clientsLock);
 		return;
+	}
 
-	pthread_mutex_lock(&clientsLock);
 	memmove(clients + i, clients + i + 1, connectedClients - i - 1);
 	connectedClients--;
 	pthread_mutex_unlock(&clientsLock);

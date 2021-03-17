@@ -17,7 +17,7 @@ CC       = arm-linux-gnueabi-gcc
 AR        = arm-linux-gnueabi-ar
 INCLUDE   = $(CURDIR)/wsServer/include
 SRC       = $(CURDIR)/wsServer/src
-CFLAGS   +=  -Wall -Wextra -O2 -march=armv5tej -marm --static
+CFLAGS   +=  -Wall -Wextra -O2 -march=armv5te -marm
 CFLAGS   +=  -I $(INCLUDE) -std=c99 -pedantic
 ARFLAGS   =  cru
 LIB       =  libws.a
