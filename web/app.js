@@ -1,9 +1,9 @@
 var jmuxer = new JMuxer({
-        node: 'player',
-        mode: 'video',
-        flushingTime: 1000,
-        fps: 30,
-        debug: false
+    node: 'player',
+    mode: 'video',
+    flushingTime: 1000,
+    fps: 20, // Is this right ?
+    debug: false
 });
 
 var socket = new WebSocket("ws://" + window.location.host + ":8080/");
@@ -20,7 +20,7 @@ socket.onmessage = function(event) {
 	//console.log("received " + buffer.length + " " + len + " " + buffer[4]);
 
     jmuxer.feed({
-        duration: len,
+        duration: 0, // No clue about this, 0 seems to give the best performances
         video: buffer.slice(5),
     });	
 };
