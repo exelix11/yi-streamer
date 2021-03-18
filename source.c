@@ -41,12 +41,11 @@ void SourceSetVideoChannel(int channel)
 			target_ch = CHANNEL_HIRES;
 			target_offset = OFFSET_HIRES;
 			break;
+		default:
+			log("wrong channel, defaulting to lowres");
 		case CHANNEL_LOWRES:
 			target_ch = CHANNEL_LOWRES;
 			target_offset = OFFSET_LORES;
-			break;
-		default:
-			err("Wrong channel number");
 			break;
 	}
 }
@@ -125,6 +124,7 @@ static int PPS_Len;
 
 void VideoResync(ReadBlock* block)
 {
+try_again: // Try to sync again if we didn't find all the info we need, in practice doesn't seem to happen
 	if (SPS)
 	{
 		free(SPS);
@@ -205,14 +205,22 @@ void VideoResync(ReadBlock* block)
 		log("Found PPS\n");
 		printhex(PPS, PPS_Len);
 	}
-	else err("no PPS");
+	else 
+	{
+		log("PPS Not found !\n");
+		goto try_again;
+	}
 
 	if (SPS)
 	{
 		log("Found SPS\n");
 		printhex(SPS, SPS_Len);
 	}
-	else err("no SPS");
+	else 
+	{
+		log("SPS Not found !\n");
+		goto try_again;
+	}
 
 	if (sendIndex != -1)
 	{
@@ -221,18 +229,18 @@ void VideoResync(ReadBlock* block)
 		block->ts = h->entries[sendIndex].ts;
 		block->index = sendIndex;
 	}
-	else err("no I frame");
+	else 
+	{
+		log("I frame Not found !\n");
+		goto try_again;
+	}
 }
  
 void AudioResync(ReadBlock* block)
 {
 	// Nothing to do here, just add last index
 	uint16_t index = view->Buffer[CHANNEL_AUDIO].Header.end;
-	if (index == 0)
-		index = CIRCULAR_SZ - 1;
-	else 
-		--index;
-
+	
 	block->index = index;
 	block->ts = view->Buffer[CHANNEL_AUDIO].entries[index].ts;
 }
