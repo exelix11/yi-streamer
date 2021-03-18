@@ -20,7 +20,7 @@
 				"-Werror",
 				"-marm",
 				"-march=armv5te",
-				"--static",
+				"-std=c11",
 
 				"-o", "yi-streamer"
 			],
