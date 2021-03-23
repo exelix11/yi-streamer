@@ -152,7 +152,10 @@ try_again: // Try to sync again if we didn't find all the info we need, in pract
 			break; // Found all we needed
 
 		if (!h->entries[index].ready)
-			err("buf entry not ready");
+		{
+			puts("Buffer is not ready, this shouldn't happen.");
+			goto try_again;
+		}	
 
 		if (h->entries[index].ts == h->Header.newestIFrameTs)
 			sendIndex = index;
